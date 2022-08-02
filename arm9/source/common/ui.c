@@ -748,7 +748,7 @@ bool ShowUnlockSequence(u32 seqlvl, const char *format, ...) {
     u32 color_font = COLOR_STD_FONT;
     u32 color_off = COLOR_GREY;
     u32 color_on = seqcolors[seqlvl];
-    u32 lvl = lvl;
+    u32 lvl = 0;
 
     u32 str_width, str_height;
     u32 x, y;
@@ -794,23 +794,7 @@ bool ShowUnlockSequence(u32 seqlvl, const char *format, ...) {
     seqsymbols[seqlen-1] = "A";
 
 
-    while (true) {
-        for (u32 n = 0; n < seqlen; n++) {
-            DrawStringF(MAIN_SCREEN, x + (n*4*FONT_WIDTH_EXT), y + str_height - 28 + line_height,
-                (lvl > n) ? color_on : color_off, color_bg, "<%s>", seqsymbols[n]);
-        }
-        if (lvl == seqlen)
-            break;
-        u32 pad_state = InputWait(0);
-        if (!(pad_state & BUTTON_ANY))
-            continue;
-        else if ((pad_state & BUTTON_ANY) == sequence[lvl])
-            lvl++;
-        else if (pad_state & BUTTON_B)
-            break;
-        else if (lvl == 0 || !(pad_state & sequence[lvl-1]))
-            lvl = 0;
-    }
+    
     #else
     DrawStringF(MAIN_SCREEN, x, y + str_height - 28, color_font, color_bg, "To proceed, hold <X>:");
 
