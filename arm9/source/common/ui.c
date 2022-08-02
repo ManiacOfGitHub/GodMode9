@@ -748,7 +748,7 @@ bool ShowUnlockSequence(u32 seqlvl, const char *format, ...) {
     u32 color_font = COLOR_STD_FONT;
     u32 color_off = COLOR_GREY;
     u32 color_on = seqcolors[seqlvl];
-    u32 lvl = 0;
+    u32 lvl = lvl;
 
     u32 str_width, str_height;
     u32 x, y;
