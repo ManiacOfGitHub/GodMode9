@@ -177,7 +177,7 @@ u32 InjectGbaVcSavegameBuffered(const char* path, const char* path_vcsave, void*
     char* ext = strrchr(path_vcsave, '.');
     if (!ext || ((strncasecmp(ext+1, "sav", 4) != 0) && (strncasecmp(ext+1, "srm", 4) != 0) &&
         (strncasecmp(ext+1, "SaveRAM", 8) != 0))) return 1; // bad extension
-    if ((fvx_stat(path_vcsave, &fno) != FR_OK) || !GBASAVE_VALID(fno.fsize))
+    if ((fvx_stat(path_vcsave, &fno) != FR_OK) || (!GBASAVE_VALID(fno.fsize) && !GBASAVE_VALID(fno.fsize - 16)))
         return 1; // bad size
 
     // read AGBsave header to memory
@@ -342,7 +342,7 @@ u32 ValidateNandDump(const char* path) {
 
     // check TWL & CTR FAT partitions
     for (u32 i = 0; i < 2; i++) {
-        char* section_type = (i) ? "CTR" : "MBR";
+        char* section_type = (i) ? "CTR" : "TWL";
         if (i == 0) { // check TWL first, then CTR
             if (GetNandNcsdPartitionInfo(&info, NP_TYPE_STD, NP_SUBTYPE_TWL, 0, &ncsd) != 0) return 1;
         } else if ((GetNandNcsdPartitionInfo(&info, NP_TYPE_STD, NP_SUBTYPE_CTR, 0, &ncsd) != 0) &&
